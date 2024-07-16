@@ -8,6 +8,17 @@ const emptyGrid = () =>
   Array(30)
     .fill(0)
     .map(() => Array(30).fill(false));
+
+const compareGrids = (grid1: boolean[][], grid2: boolean[][]) => {
+  for (let i = 0; i < grid1.length; i++) {
+    for (let j = 0; j < grid2.length; j++) {
+      if (grid1[i][j] !== grid2[i][j]) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
 const App = () => {
   const [grid, setGrid] = useState<boolean[][]>(emptyGrid());
   const [play, setPlay] = useState<boolean>(false);
@@ -45,7 +56,6 @@ const App = () => {
           }
           return count;
         }, 0);
-        // console.log(liveNeighbors);
         if (col) {
           return (col = liveNeighbors === 2 || liveNeighbors === 3);
         } else {
@@ -53,7 +63,6 @@ const App = () => {
         }
       })
     );
-    // console.log(newGrid);
     return newGrid;
   };
 
@@ -69,7 +78,19 @@ const App = () => {
   useEffect(() => {
     let intervalId: number;
     if (play) {
-      intervalId = setInterval(() => setGrid((prev) => nextGrid(prev)), 500);
+      intervalId = setInterval(
+        () =>
+          setGrid((prev) => {
+            const response = nextGrid(prev);
+
+            if (compareGrids(response, prev)) {
+              clearInterval(intervalId);
+              setPlay(false);
+            }
+            return response;
+          }),
+        500
+      );
     }
     return () => clearInterval(intervalId);
   }, [play]);
@@ -92,7 +113,7 @@ const App = () => {
                   className={`w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-[18px] md:h-[18px]  border   ${
                     col
                       ? "bg-yellow-400 border-gray-400"
-                      : " bg-neutral-400 border-gray-300  bg-opacity-60 border-opacity-40"
+                      : " bg-neutral-400 border-gray-300  bg-opacity-90 border-opacity-70"
                   }`}
                 />
               ))}
@@ -114,10 +135,7 @@ const App = () => {
           <span className="">
             <FaPlay />
           </span>
-          <span
-            onClick={() => setPlay((prev) => !prev)}
-            className="font-semibold"
-          >
+          <span onClick={() => setPlay(true)} className="font-semibold">
             {play ? "Pause" : "Start"}
           </span>
         </button>
@@ -136,7 +154,7 @@ const App = () => {
           </span>
         </button>
       </div>
-      <div className="text-gray-950 m-4 overflow-y-auto lg:hidden w-[45%]">
+      <div className="text-gray-950 m-4 overflow-y-auto lg:hidden w-[70%]">
         <Rules />
       </div>
     </main>
