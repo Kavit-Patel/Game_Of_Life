@@ -96,7 +96,7 @@ const App = () => {
   }, [play]);
   return (
     <main className="w-full min-h-screen bg-blue-400 flex flex-col items-center">
-      <div className=" w-full flex justify-center items-center text-sm md:text-2xl lg:text-4xl font-extrabold text-blue-200 py-2">
+      <div className=" w-full flex justify-center items-center text-sm md:text-2xl lg:text-4xl font-extrabold text-blue-300 py-2">
         Conway's Game of Life
       </div>
       <section className="w-full flex flex-col md:flex-row bg-slate-600 pt-1.5 gap-3">
@@ -135,7 +135,10 @@ const App = () => {
           <span className="">
             <FaPlay />
           </span>
-          <span onClick={() => setPlay(true)} className="font-semibold">
+          <span
+            onClick={() => setPlay((prev) => !prev)}
+            className="font-semibold"
+          >
             {play ? "Pause" : "Start"}
           </span>
         </button>
@@ -154,7 +157,7 @@ const App = () => {
           </span>
         </button>
       </div>
-      <div className="text-gray-950 m-4 overflow-y-auto lg:hidden w-[70%]">
+      <div className="text-gray-950 m-4 overflow-y-auto lg:hidden w-[60%]">
         <Rules />
       </div>
     </main>
